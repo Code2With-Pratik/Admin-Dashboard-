@@ -41,7 +41,7 @@ const Dashboard = () => {
           <button onClick={toggleSidebar} className="md:hidden">
             {isSidebarOpen ? '✖' : '☰'}
           </button>
-          <h1 className="text-xl font-bold">SmartStore</h1>
+          <h1 className="text-2xl font-bold">SmartStore</h1>
         </div>
         <div className="flex items-center space-x-4">
           <button

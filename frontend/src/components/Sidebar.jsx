@@ -24,7 +24,7 @@ const Sidebar = ({ setActiveSection, isOpen, toggleSidebar }) => {
       ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:w-48`}
     >
       <div className="p-4">
-        <span className="block md:block">SMARTSTORE</span>
+        <span className="text-2xl block md:block">SMARTSTORE</span>
       </div>
       <div className="flex flex-col flex-1">
         {sections.map((section) => (
