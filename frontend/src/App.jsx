@@ -1,15 +1,22 @@
-import Dashboard from "./pages/Dashboard";
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import React, { createContext, useState } from 'react';
+import Dashboard from './pages/Dashboard';
 
-function App() {
-  const [count, setCount] = useState(0);
+export const ThemeContext = createContext();
+
+const App = () => {
+  const [theme, setTheme] = useState('dark'); // Default to dark
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
 
   return (
-    <Dashboard />
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <div className={theme}>
+        <Dashboard />
+      </div>
+    </ThemeContext.Provider>
   );
-}
+};
 
 export default App;
