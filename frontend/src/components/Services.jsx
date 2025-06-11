@@ -6,12 +6,11 @@ const Services = () => {
 
   const data = [
     { id: 10, name: 'Instagram Followers', originalPrice: 1999, discount: 0, price: 1999, quantity: 500, type: 'API', provider: 'Vinasmm', apiRate: 1469, status: 'Active', created: '2024-11-20' },
-    { id: 1, name: 'Instagram Followers', originalPrice: 1999, discount: 0, price: 1999, quantity: 500, type: 'API', provider: 'Vinasmm', apiRate: 1469, status: 'Active', created: '2024-11-20' },
-    { id: 15, name: 'Instagram Followers', originalPrice: 5000, discount: 0, price: 1529, quantity: 500, type: 'API', provider: 'Vinasmm', apiRate: 1469, status: 'Active', created: '2024-11-20' },
-    { id: 12, name: 'Instagram Followers', originalPrice: 1999, discount: 0, price: 1999, quantity: 500, type: 'API', provider: 'Vinasmm', apiRate: 1469, status: 'Active', created: '2024-11-20' },
-    { id: 17, name: 'Instagram Followers', originalPrice: 1999, discount: 0, price: 1999, quantity: 500, type: 'API', provider: 'Vinasmm', apiRate: 1469, status: 'Active', created: '2024-11-20' },
-    { id: 16, name: 'Instagram Followers', originalPrice: 1999, discount: 0, price: 1999, quantity: 500, type: 'API', provider: 'Vinasmm', apiRate: 1469, status: 'Active', created: '2024-11-20' },
-    { id: 18, name: 'Instagram Followers', originalPrice: 1999, discount: 0, price: 1999, quantity: 500, type: 'API', provider: 'Vinasmm', apiRate: 1469, status: 'Active', created: '2024-11-20' },
+    { id: 21, name: 'Instagram Followers', originalPrice: 1200, discount: 5, price: 1140, quantity: 800, type: 'API', provider: 'LikeBoost', apiRate: 1000, status: 'Active', created: '2024-11-30' },
+    { id: 22, name: 'Instagram Followers', originalPrice: 1500, discount: 0, price: 1500, quantity: 1200, type: 'API', provider: 'Vinasmm', apiRate: 1300, status: 'Inactive', created: '2024-12-01' },
+    { id: 23, name: 'Instagram Followers', originalPrice: 800, discount: 10, price: 720, quantity: 600, type: 'Manual', provider: 'LikeBoost', apiRate: 650, status: 'Active', created: '2024-12-02' },
+    { id: 24, name: 'Instagram Followers', originalPrice: 2000, discount: 15, price: 1700, quantity: 1500, type: 'API', provider: 'SocialPro', apiRate: 1600, status: 'Active', created: '2024-12-03' },
+    { id: 25, name: 'Instagram Followers', originalPrice: 1100, discount: 0, price: 1100, quantity: 700, type: 'API', provider: 'Vinasmm', apiRate: 950, status: 'Inactive', created: '2024-12-04' },
     { id: 11, name: 'Instagram Likes', originalPrice: 999, discount: 10, price: 899, quantity: 1000, type: 'API', provider: 'Vinasmm', apiRate: 799, status: 'Active', created: '2024-11-20' },
     { id: 12, name: 'Twitter Followers', originalPrice: 2500, discount: 0, price: 2500, quantity: 300, type: 'API', provider: 'SocialPro', apiRate: 2000, status: 'Inactive', created: '2024-11-21' },
     { id: 13, name: 'YouTube Views', originalPrice: 5000, discount: 5, price: 4750, quantity: 5000, type: 'API', provider: 'ViewBoost', apiRate: 4000, status: 'Active', created: '2024-11-22' },
@@ -29,19 +28,25 @@ const Services = () => {
     { id: 25, name: 'Instagram Likes', originalPrice: 1100, discount: 0, price: 1100, quantity: 700, type: 'API', provider: 'Vinasmm', apiRate: 950, status: 'Inactive', created: '2024-12-04' },
   ];
 
-  const followersData = data.filter((item) => item.name === 'Instagram Followers');
-  const likesData = data.filter((item) => item.name === 'Instagram Likes');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchField, setSearchField] = useState('name');
 
-  // Pagination state
+  const filteredData = data.filter((item) =>
+    item[searchField].toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const followersData = filteredData.filter(item => item.name === 'Instagram Followers');
+  const likesData = filteredData.filter(item => item.name === 'Instagram Likes');
+
   const [currentPageFollowers, setCurrentPageFollowers] = useState(1);
   const [currentPageLikes, setCurrentPageLikes] = useState(1);
   const itemsPerPage = 5;
 
-  const paginate = (dataArray, currentPage) => {
-    const totalPages = Math.ceil(dataArray.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentPageData = dataArray.slice(startIndex, startIndex + itemsPerPage);
-    return { totalPages, currentPageData };
+  const paginate = (arr, page) => {
+    const total = Math.ceil(arr.length / itemsPerPage);
+    const start = (page - 1) * itemsPerPage;
+    const data = arr.slice(start, start + itemsPerPage);
+    return { totalPages: total, currentPageData: data };
   };
 
   const { totalPages: totalFollowersPages, currentPageData: currentFollowersData } = paginate(followersData, currentPageFollowers);
@@ -51,14 +56,14 @@ const Services = () => {
     <>
       <thead>
         <tr className="bg-gray-700 text-white">
-          {['ID', 'NAME', 'ORIGINAL PRICE', 'DISCOUNT (%)', 'PRICE', 'QUANTITY', 'TYPE', 'PROVIDER', 'API RATE (PER 1000)', 'STATUS', 'CREATED', 'ACTION'].map((head, idx) => (
-            <th key={idx} className="p-2">{head}</th>
+          {['ID', 'NAME', 'ORIGINAL PRICE', 'DISCOUNT (%)', 'PRICE', 'QUANTITY', 'TYPE', 'PROVIDER', 'API RATE (PER 1000)', 'STATUS', 'CREATED', 'ACTION'].map((head, i) => (
+            <th key={i} className="p-2">{head}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         {dataArray.length === 0 ? (
-          <tr><td colSpan="12" className="text-center p-4">No data available.</td></tr>
+          <tr><td colSpan="12" className="text-center p-4">No data found.</td></tr>
         ) : (
           dataArray.map(item => (
             <tr key={item.id} className="border-b border-gray-600">
@@ -82,30 +87,26 @@ const Services = () => {
   );
 
   const renderPagination = (totalPages, currentPage, setPage) => (
-    <nav aria-label="Pagination" className="mt-4 flex justify-center mb-8">
+    <div className="mt-4 flex justify-center mb-8">
       <ul className="flex space-x-2">
         <li>
           <button
-            onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+            onClick={() => setPage(p => Math.max(p - 1, 1))}
             disabled={currentPage === 1}
             className={`px-3 py-1 rounded border ${currentPage === 1
-              ? theme === 'dark' ? 'bg-gray-800 text-gray-500 border-gray-600 cursor-not-allowed'
-              : 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
-              : theme === 'dark' ? 'bg-gray-700 text-white hover:bg-gray-600'
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-white text-gray-700 hover:bg-blue-100 border-gray-400'}`}
           >
             Previous
           </button>
         </li>
         {[...Array(totalPages)].map((_, i) => (
-          <li key={i + 1}>
+          <li key={i}>
             <button
               onClick={() => setPage(i + 1)}
               className={`px-3 py-1 rounded border ${currentPage === i + 1
-                ? theme === 'dark' ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-blue-500 text-white border-blue-500'
-                : theme === 'dark' ? 'bg-gray-700 text-white border-gray-500 hover:bg-gray-600'
-                : 'bg-white text-gray-700 border-gray-400 hover:bg-blue-100'}`}
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white text-gray-700 hover:bg-blue-100 border-gray-400'}`}
             >
               {i + 1}
             </button>
@@ -113,24 +114,43 @@ const Services = () => {
         ))}
         <li>
           <button
-            onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={() => setPage(p => Math.min(p + 1, totalPages))}
             disabled={currentPage === totalPages}
             className={`px-3 py-1 rounded border ${currentPage === totalPages
-              ? theme === 'dark' ? 'bg-gray-800 text-gray-500 border-gray-600 cursor-not-allowed'
-              : 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
-              : theme === 'dark' ? 'bg-gray-700 text-white hover:bg-gray-600'
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-white text-gray-700 hover:bg-blue-100 border-gray-400'}`}
           >
             Next
           </button>
         </li>
       </ul>
-    </nav>
+    </div>
   );
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-6">SERVICES</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold">SERVICES</h2>
+        <div className="flex items-center space-x-2 bg-gray-800 rounded-md p-1 px-2">
+          <input
+            type="text"
+            placeholder="Search for..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-transparent text-white placeholder-gray-400 focus:outline-none px-2 py-1"
+          />
+          <select
+            value={searchField}
+            onChange={(e) => setSearchField(e.target.value)}
+            className="bg-transparent text-white focus:outline-none px-2 py-1"
+          >
+            <option value="name">Name</option>
+            <option value="status">Status</option>
+            <option value="provider">Provider</option>
+            <option value="type">Type</option>
+          </select>
+        </div>
+      </div>
 
       <h4 className="font-semibold mb-4">Instagram Followers</h4>
       <table className="w-full border-collapse mb-4">{renderTable(currentFollowersData)}</table>
