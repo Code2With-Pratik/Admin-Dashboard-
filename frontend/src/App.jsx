@@ -1,5 +1,7 @@
 import React, { createContext, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
+import AdminLogin from './pages/AdminLogin';
 
 export const ThemeContext = createContext();
 
@@ -13,7 +15,12 @@ const App = () => {
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <div className={theme}>
-        <Dashboard />
+        <Router>
+          <Routes>
+            <Route path="/" element={<AdminLogin />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </Router>
       </div>
     </ThemeContext.Provider>
   );
