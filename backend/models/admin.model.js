@@ -22,10 +22,23 @@ const Admin = {
     return rows;
   },
 
-  updateRole: async (id, role) => {
-    const [result] = await db.query("UPDATE admins SET role = ? WHERE id = ?", [role, id]);
-    return result.affectedRows;
-  }
+ updateRole: async (id, role, name) => {
+  // Fetch current admin data
+  const [rows] = await db.query("SELECT name, role FROM admins WHERE id = ?", [id]);
+  if (rows.length === 0) return 0;
+
+  const current = rows[0];
+
+  // Use existing values if any field is missing
+  const updatedName = name || current.name;
+  const updatedRole = role || current.role;
+
+  const [result] = await db.query(
+    "UPDATE admins SET name = ?, role = ? WHERE id = ?",
+    [updatedName, updatedRole, id]
+  );
+  return result.affectedRows;
+}
 };
 
 module.exports = Admin;

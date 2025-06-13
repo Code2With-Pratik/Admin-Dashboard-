@@ -6,7 +6,7 @@ const Customer = {
     try {
       const [rows] = await db.query(`
         SELECT id, full_name, email, phone, referral_code, referred_by, created_at 
-        FROM customers
+        FROM users
       `);
       return rows;
     } catch (err) {
@@ -18,7 +18,7 @@ const Customer = {
     try {
       const [rows] = await db.query(`
         SELECT id, full_name, email, phone, referral_code, referred_by, created_at 
-        FROM customers 
+        FROM users 
         WHERE id = ?
       `, [id]);
       return rows[0];
@@ -30,7 +30,7 @@ const Customer = {
   deleteById: async (id) => {
     try {
       const [result] = await db.query(`
-        DELETE FROM customers 
+        DELETE FROM users 
         WHERE id = ?
       `, [id]);
       return result.affectedRows > 0;

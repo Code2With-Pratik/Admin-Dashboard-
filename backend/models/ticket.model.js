@@ -1,31 +1,38 @@
-class Ticket {
-  constructor(db) {
-    this.db = db;
-  }
+// backend/models/ticket.model.js
+const db = require("../config/db");
 
-  create({ user_id, order_id, title, description }) {
-    const sql = `
-      INSERT INTO tickets (user_id, order_id, title, description, status, created_at)
-      VALUES (?, ?, ?, ?, 'pending', NOW())
-    `;
-    return this.db.promise().execute(sql, [user_id, order_id, title, description]);
-  }
+const Ticket = {
 
-  getAll() {
-    return this.db.promise().query(`
-      SELECT t.*, u.name AS user_name 
-      FROM tickets t 
-      JOIN users u ON t.user_id = u.id 
-      ORDER BY t.created_at DESC
-    `);
-  }
+  getAll: async () => {
+    try {
+      const sql = `
+        SELECT t.*, u.full_name AS user_name 
+FROM support_tickets t 
+LEFT JOIN users u ON t.user_id = u.id 
+ORDER BY t.created_at DESC;
 
-  updateStatus(ticketId, status) {
-    return this.db.promise().execute(
-      "UPDATE tickets SET status = ? WHERE id = ?",
+      `;
+
+      const rows = await db.query(sql);
+      return rows;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateStatus: async (ticketId, status) => {
+  try {
+    const result = await db.query(
+      `UPDATE support_tickets SET status = ? WHERE id = ?`,
       [status, ticketId]
     );
+    // Depending on DB driver, you might need to access `result[0].affectedRows`
+    return result.affectedRows > 0 || result[0]?.affectedRows > 0;
+  } catch (err) {
+    throw err;
   }
 }
+
+};
 
 module.exports = Ticket;

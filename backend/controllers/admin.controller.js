@@ -25,9 +25,9 @@ exports.createAdmin = async (req, res) => {
 
 exports.updateAdminRole = async (req, res) => {
   const { id } = req.params;
-  const { role } = req.body;
+  const { role ,name} = req.body;
   try {
-    const updated = await Admin.updateRole(id, role);
+    const updated = await Admin.updateRole(id, role,name);
     if (updated) {
       res.status(200).json({ message: "Role updated" });
     } else {
