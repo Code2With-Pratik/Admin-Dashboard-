@@ -142,13 +142,14 @@ const Services = () => {
           <select
             value={searchField}
             onChange={(e) => setSearchField(e.target.value)}
-            className="bg-transparent text-white focus:outline-none px-2 py-1"
+            className="bg-gray-800 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="name">Name</option>
-            <option value="status">Status</option>
-            <option value="provider">Provider</option>
-            <option value="type">Type</option>
+            <option className="bg-gray-800 text-white" value="name">Name</option>
+            <option className="bg-gray-800 text-white" value="status">Status</option>
+            <option className="bg-gray-800 text-white" value="provider">Provider</option>
+            <option className="bg-gray-800 text-white" value="type">Type</option>
           </select>
+
         </div>
       </div>
 
