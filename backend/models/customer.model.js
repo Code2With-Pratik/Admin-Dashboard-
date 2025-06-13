@@ -1,44 +1,42 @@
 // backend/models/customer.model.js
-
 const db = require("../config/db");
 
 const Customer = {
-  getAll: () => {
-    return new Promise((resolve, reject) => {
-      const query = `
-        SELECT id, name, email, phone, address, created_at 
-        FROM users 
-        WHERE role = 'customer'
-      `;
-      db.query(query, (err, results) => {
-        if (err) return reject(err);
-        resolve(results);
-      });
-    });
+  getAll: async () => {
+    try {
+      const [rows] = await db.query(`
+        SELECT id, full_name, email, phone, referral_code, referred_by, created_at 
+        FROM customers
+      `);
+      return rows;
+    } catch (err) {
+      throw err;
+    }
   },
 
-  getById: (id) => {
-    return new Promise((resolve, reject) => {
-      const query = `
-        SELECT id, name, email, phone, address, created_at 
-        FROM users 
-        WHERE id = ? AND role = 'customer'
-      `;
-      db.query(query, [id], (err, results) => {
-        if (err) return reject(err);
-        resolve(results[0]);
-      });
-    });
+  getById: async (id) => {
+    try {
+      const [rows] = await db.query(`
+        SELECT id, full_name, email, phone, referral_code, referred_by, created_at 
+        FROM customers 
+        WHERE id = ?
+      `, [id]);
+      return rows[0];
+    } catch (err) {
+      throw err;
+    }
   },
 
-  deleteById: (id) => {
-    return new Promise((resolve, reject) => {
-      const query = `DELETE FROM users WHERE id = ? AND role = 'customer'`;
-      db.query(query, [id], (err, results) => {
-        if (err) return reject(err);
-        resolve(results.affectedRows > 0);
-      });
-    });
+  deleteById: async (id) => {
+    try {
+      const [result] = await db.query(`
+        DELETE FROM customers 
+        WHERE id = ?
+      `, [id]);
+      return result.affectedRows > 0;
+    } catch (err) {
+      throw err;
+    }
   }
 };
 

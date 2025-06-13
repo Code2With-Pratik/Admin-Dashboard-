@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/admin.controller");
-// You can add middleware here to restrict to superadmins
+// You can add middleware here to restrict to superadmin
 
 router.get("/", adminController.getAllAdmins);
 router.post("/", adminController.createAdmin);
